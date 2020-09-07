@@ -12,64 +12,51 @@ def clear_prev_lines(num_lines):
         sys.stdout.write(ERASE_LINE)
 
 
-def up(state):
-    state.changeCurrent(-1)
-
-
-def down(state):
-    state.changeCurrent(1)
-
-
-def space(state):
-    state.toggleSelected()
-
-
-def enter(state):
-    clear_prev_lines(len(state.options) + 1)
-
-
-class State:
-    def __init__(self, prompt, options):
-        self.current = 0
-        self.selected = []
-        self.prompt = prompt
-        self.options = options
-        self.show_menu(clear=False)
-
-    def show_menu(self, clear=True):
-        if clear:
-            clear_prev_lines(len(self.options) + 1)
-        print(self.prompt, '(Press SPACE to select and ENTER to continue)')
-        for i in range(len(self.options)):
-            arrow = '<' if self.current == i else ''
-            check_box = '✅' if i in self.selected else '🟩'
-            print(check_box, self.options[i], arrow)
-
-    def changeCurrent(self, value):
-        new_value = self.current + value
-        if new_value < 0 or new_value >= len(self.options):
-            return
-        self.current += value
-        self.show_menu()
-
-    def toggleSelected(self):
-        if self.current in self.selected:
-            self.selected.remove(self.current)
-        else:
-            self.selected.append(self.current)
-        self.show_menu()
-
-
 def select_from_list(prompt, options):
+    class State:
+        def __init__(self, prompt, options):
+            self.cursor = 0
+            self.selected = []
+            self.prompt = prompt
+            self.options = options
+            self.show_menu(clear=False)
+
+        def show_menu(self, clear=True):
+            if clear:
+                clear_prev_lines(len(self.options) + 1)
+            print(self.prompt, '(Press SPACE to select and ENTER to continue)')
+            for i in range(len(self.options)):
+                arrow = '<' if self.cursor == i else ''
+                check_box = '✅' if i in self.selected else '🟩'
+                print(check_box, self.options[i], arrow)
+
+        def changeCursor(self, value):
+            new_value = self.cursor + value
+            if new_value < 0 or new_value >= len(self.options):
+                return
+            self.cursor += value
+            self.show_menu()
+
+        def toggleSelected(self):
+            if self.cursor in self.selected:
+                self.selected.remove(self.cursor)
+            else:
+                self.selected.append(self.cursor)
+            self.show_menu()
+
     state = State(prompt, options)
 
-    keyboard.add_hotkey('up', lambda: up(state))
-    keyboard.add_hotkey('down', lambda: down(state))
-    keyboard.add_hotkey('space', lambda: space(state))
-    keyboard.add_hotkey('enter', lambda: enter(state))
+    keyboard.add_hotkey('up', lambda: state.changeCursor(-1))
+    keyboard.add_hotkey('down', lambda: state.changeCursor(1))
+    keyboard.add_hotkey('space', lambda: state.toggleSelected())
+    keyboard.add_hotkey(
+        'enter', lambda: clear_prev_lines(len(state.options) + 1)
+    )
+
     keyboard.wait('enter')
+
     keyboard.unhook_all()
-    input() # I have no fucking idea why this fixes the bug that I tried to fix for 4 hours or so ❤
+    input()  # I have no fucking idea why this fixes the bug that I tried to fix for 4 hours or so ❤
     sys.stdout.write(CURSOR_UP_ONE)
 
     return state.selected
