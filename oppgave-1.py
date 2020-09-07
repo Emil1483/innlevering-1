@@ -1,6 +1,10 @@
-from math import log10
+from test_utils import test_function, test_function_with_prompt
+from input_utils import get_float
 
-from test_utils import test_function
+from math import log10
+import os
+os.system('cls' if os.name == 'nt' else 'clear')
+
 
 """
 The definition of pH from chemistry is the following:
@@ -18,3 +22,6 @@ test_function(get_pH, [
     2,
     4 * 10**(-10)
 ])
+
+print()  # new line
+test_function_with_prompt(get_pH, 'oxonium consentration: ')
