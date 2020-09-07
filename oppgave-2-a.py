@@ -1,7 +1,5 @@
-#%% 
 from test_utils import test_function
 
-import pylab
 import os
 os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -17,19 +15,9 @@ def exponential_growth(start, rate, duration):
         population.append(current)
         time.append(current_time)
 
-    return current, time, population
-
-def exponential_growth_simple(start, rate, duration):
-    growth = exponential_growth(start, rate, duration)
-    return growth[0]
+    return current
 
 
-test_function(exponential_growth_simple, [
+test_function(exponential_growth, [
     [1000, .62, 15],
-    [1000, .62, 16],
 ])
-
-growth = exponential_growth(1000, .62, 15)
-pylab.plot(growth[1], growth[2])
-
-# %%
