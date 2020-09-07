@@ -28,5 +28,5 @@ def get_float(prompt):
 
 
 if __name__ == "__main__":
-    os.system('cls')
+    os.system('cls' if os.name == 'nt' else 'clear')
     print("{0} is an awesome number 😸. Thank you.".format(get_float("float: ")))
