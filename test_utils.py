@@ -1,9 +1,8 @@
 from input_utils import get_float
+from re import sub
 
 
 def test_function(function, test_parameters):
-    check_arguments_count(function)
-
     print('testing', function.__name__ + ':')
 
     for test_parameter in test_parameters:
@@ -12,8 +11,6 @@ def test_function(function, test_parameters):
 
 
 def test_function_with_prompt(function, prompt):
-    check_arguments_count(function)
-
     print('testing', function.__name__ + ':')
 
     # show the prompt indented by 4 spaces
@@ -21,13 +18,12 @@ def test_function_with_prompt(function, prompt):
     print(' ' * 4 + format_function_test(function, input_variable))
 
 
-def format_function_test(function, test_parameter):
+def format_function_test(function, function_input):
+    is_list = type(function_input) is list
     return '{0}({1}) = {2}'.format(
-        function.__name__, test_parameter, function(test_parameter)
+        function.__name__,
+        # if the function_input is a list, remove '[' and ']' from the string
+        sub('[\[\]]', '', str(function_input)),
+        # if the function_input is a list, use *function_input
+        function(*function_input) if is_list else function(function_input)
     )
-
-
-def check_arguments_count(function):
-    # I don't want to deal with functions that take multiple parameters
-    if function.__code__.co_argcount > 1:
-        raise Exception('function must only get one argument')
