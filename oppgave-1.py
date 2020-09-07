@@ -1,7 +1,5 @@
 from math import log10
-import sys
 
-sys.path.insert(1, './utils')
 from test_utils import test_function
 
 """
@@ -14,4 +12,9 @@ The definition of pH from chemistry is the following:
 def get_pH(oxonium):
     return -log10(oxonium)
 
-test_function(get_pH, [10**(-5), 2])
+
+test_function(get_pH, [
+    10**(-5),
+    2,
+    4 * 10**(-10)
+])
