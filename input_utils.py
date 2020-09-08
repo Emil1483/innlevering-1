@@ -30,50 +30,53 @@ def select_from_list(prompt, options):
                 check_box = '✅' if i in self.selected else '🟩'
                 print(check_box, self.options[i], arrow)
 
-        def changeCursor(self, value):
+        def change_cursor(self, value):
             new_value = self.cursor + value
             if new_value < 0 or new_value >= len(self.options):
                 return
             self.cursor += value
             self.show_menu()
 
-        def toggleSelected(self):
+        def toggle_selected(self):
             if self.cursor in self.selected:
                 self.selected.remove(self.cursor)
             else:
                 self.selected.append(self.cursor)
             self.show_menu()
+        
+        def show_end_menu(self):
+            self.cursor = -1
+            self.show_menu()
+            print()
 
     state = State(prompt, options)
 
-    keyboard.add_hotkey('up', lambda: state.changeCursor(-1))
-    keyboard.add_hotkey('down', lambda: state.changeCursor(1))
-    keyboard.add_hotkey('space', lambda: state.toggleSelected())
-    keyboard.add_hotkey(
-        'enter', lambda: clear_prev_lines(len(state.options) + 1)
-    )
+    keyboard.add_hotkey('up', lambda: state.change_cursor(-1))
+    keyboard.add_hotkey('down', lambda: state.change_cursor(1))
+    keyboard.add_hotkey('space', lambda: state.toggle_selected())
+    keyboard.add_hotkey('enter', lambda: state.show_end_menu())
 
     keyboard.wait('enter')
 
     keyboard.unhook_all()
-    input()  # I have no fucking idea why this fixes the bug that I tried to fix for 4 hours or so ❤
+    input()
     sys.stdout.write(CURSOR_UP_ONE)
 
-    return state.selected
+    return [options[selected] for selected in state.selected]
 
 
 def get_float(prompt):
-    error = False
+    error=False
     while True:
         try:
-            value = input(prompt)
+            value=input(prompt)
             if error:
                 clear_prev_lines(2)
                 print(prompt + value)
             return float(value)
         except ValueError:
             clear_prev_lines(1)
-            error = True
+            error=True
             print("\"{0}\"".format(value), "is not a valid input,",
                   "please try again")
 
