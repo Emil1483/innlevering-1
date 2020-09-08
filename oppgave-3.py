@@ -69,7 +69,7 @@ def main():
         Equation([
             ('s', lambda v0, t, a: v0 * t + a * t**2 / 2),
             ('v0', lambda s, t, a: (s - a * t**2 / 2) / t),
-            ('t', lambda s, v0, a: -v0 + (v0**2 + 2 * a * s)**0.5),
+            ('t', lambda s, v0, a: (-v0 + (v0**2 + 2 * a * s)**0.5) / a),
             ('a', lambda s, v0, t: (s - v0 * t) * 2 / t**2),
         ]),
         Equation([
