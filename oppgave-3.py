@@ -1,6 +1,5 @@
 from input_utils import select_from_list, get_float
 import os
-# os.system('cls' if os.name == 'nt' else 'clear')
 
 
 class Equation:
@@ -45,10 +44,14 @@ class Equation:
                 self.get_variable_from_name(variables, name)
             )
 
-        return (missing_variables_getter[0], missing_variables_getter[1](*input_variables))
-
+        return (
+            missing_variables_getter[0],
+            missing_variables_getter[1](*input_variables)
+        )
 
 def main():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
     possible_variables = ['v', 'v0', 'a', 't', 's', 'v_avg']
     equations = [
         # v = v0 + a * t
