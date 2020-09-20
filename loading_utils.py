@@ -32,7 +32,7 @@ def get_indicator(integer):
 
 
 def build_loading_string(value, bar_length=10):
-    # value is a double 0-1
+    # value is a float 0-1
     persentage = round(value * 100)
     bars = '█' * round(value * bar_length)
     spaces = ' ' * round((1 - value) * bar_length)
