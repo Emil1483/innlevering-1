@@ -6,11 +6,9 @@ import os
 os.system('cls' if os.name == 'nt' else 'clear')
 
 
-"""
-The definition of pH from chemistry is the following:
-    pH = -log(oxonium)
-    where oxonium is the consentration H3O+ in mol/L
-"""
+# The definition of pH from chemistry is the following:
+#     pH = -log(oxonium)
+#     where oxonium is the consentration H3O+ in mol/L
 
 
 def get_pH(oxonium):

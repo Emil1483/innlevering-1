@@ -14,6 +14,8 @@ for x in range(-100, 101):
     for y in range(-100, 101):
         for z in range(-100, 101):
             number = x**3 + y**3 + z**3
+            
+            # this checks if the number is between 0 and 10
             if number in range(11):
                 results.append((x, y, z, number))
                 

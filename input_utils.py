@@ -43,7 +43,7 @@ def select_from_list(prompt, options):
             if new_value < 0 or new_value >= len(self.options):
                 return
             self.cursor += value
-            self.show_menu() # re-render the ui
+            self.show_menu()  # re-render the ui
 
         def toggle_selected(self):
             if self.cursor in self.selected:
@@ -54,9 +54,9 @@ def select_from_list(prompt, options):
 
         def show_end_menu(self):
             # to not show cursor, put the cursor on -1
-            # where which is not associated with any option
+            # which is not associated with any option
             self.cursor = -1
-            self.show_menu() # re-render the ui
+            self.show_menu()  # re-render the ui
             print()
 
     state = State(prompt, options)
@@ -73,10 +73,12 @@ def select_from_list(prompt, options):
     # dispose all key bindings
     keyboard.unhook_all()
     # this fixes a weird bug that causes user input to be
-    # executed in the terminal after the function ends
+    # executed in the terminal after the program halts
     input()
     sys.stdout.write(CURSOR_UP_ONE)
 
+    # state.selected is a list of indexes where each index
+    # refers to an element in the option array.
     return [options[selected] for selected in state.selected]
 
 
@@ -93,9 +95,9 @@ def get_float(prompt):
                 print(prompt + user_input)
             return float(user_input)
         except ValueError:
+            error = True
             # first, remove the input prompt
             clear_prev_lines(1)
-            error = True
             # show error text
             print(f'\"{user_input}\"', "is not a valid input, please try again")
 

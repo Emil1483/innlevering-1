@@ -24,6 +24,6 @@ def format_function_test(function, function_input):
         function.__name__,
         # if the function_input is a list, remove '[' and ']' from the string
         sub(r'[\[\]]', '', str(function_input)),
-        # if the function_input is a list, use *function_input
+        # if the function_input is a list, use *function_input to split the arguments
         function(*function_input) if is_list else function(function_input)
     )
