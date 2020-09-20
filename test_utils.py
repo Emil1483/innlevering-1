@@ -23,7 +23,7 @@ def format_function_test(function, function_input):
     return '{0}({1}) = {2}'.format(
         function.__name__,
         # if the function_input is a list, remove '[' and ']' from the string
-        sub('[\[\]]', '', str(function_input)),
+        sub(r'[\[\]]', '', str(function_input)),
         # if the function_input is a list, use *function_input
         function(*function_input) if is_list else function(function_input)
     )

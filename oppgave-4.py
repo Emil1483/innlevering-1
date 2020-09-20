@@ -8,7 +8,7 @@ os.system('cls' if os.name == 'nt' else 'clear')
 
 results = []
 for x in range(-100, 101):
-    value = (x + 100) / 200
+    value = (x + 100) / 200 # float 0-1
     clear_prev_lines(1)
     print(build_loading_string(value, 20))
     for y in range(-100, 101):
@@ -16,8 +16,8 @@ for x in range(-100, 101):
             number = x**3 + y**3 + z**3
             if number in range(11):
                 results.append((x, y, z, number))
+                
 
-for result in results:
-    x, y, z, n = result
+for x, y, z, n in results:
     print(f'({x})³ + ({y})³ + ({z})³ = {n}')
 print('total integer solutions:', len(results))
