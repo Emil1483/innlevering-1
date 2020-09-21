@@ -8,11 +8,11 @@ def exponential_growth(start, rate, duration):
     # current refers to the current population in CFU
     current = start
 
-    # For each hour, the population should be (1 + rate) of
+    # For each hour, the population should be (1 + rate) times
     # the current population. For example, if the rate is 50 %,
-    # the current population should become 1.5 of itself for
+    # the current population should become 1.5 times itself for
     # each hour that passes.
-    for current_time in range(1, duration + 1):
+    for _ in range(1, duration + 1):
         current *= 1 + rate
 
     return current

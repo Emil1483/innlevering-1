@@ -60,6 +60,7 @@ class Equation:
         )
 
 def main():
+    # clears the console 🧹
     os.system('cls' if os.name == 'nt' else 'clear')
 
     possible_variables = ['v', 'v0', 'a', 't', 's', 'v_avg']
@@ -101,10 +102,10 @@ def main():
     ]
 
     known_variables_names = select_from_list(
-        'What variables do you know?', possible_variables)
+        'What variables do you know? 😳👉👈', possible_variables)
 
     # do not event attempt doing anything if the user
-    # does not know any variables
+    # does not know any variables! 🤨🔪
     if len(known_variables_names) == 0:
         print('You have to know at least one variable')
         return

@@ -18,11 +18,6 @@ def realistic_growth(start, rate, duration, limit, dt):
     time = [0]
     population = [current]
 
-    # For each hour, the population should be (1 + rate) of
-    # the current population. For example, if the rate is 50 %,
-    # the current population should become 1.5 of itself for
-    # each hour that passes.
-
     current_time = dt
     while current_time <= duration:
         # the original function was p(t) = a * r^t
@@ -39,7 +34,7 @@ def realistic_growth(start, rate, duration, limit, dt):
         # we could simply write: current += dp. However,
         # this does not consider the limit.
         # I imagine the limit to cause the population change
-        # to go drop to 0 as the population approaches the limit.
+        # to drop to 0 as the population approaches the limit.
         # As such, I multiply the change with (1 - current / limit)
         # because this expression drops to 0 as the current approaches
         # the limit.

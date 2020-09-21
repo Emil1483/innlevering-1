@@ -27,7 +27,7 @@ def select_from_list(prompt, options):
             if clear:
                 clear_prev_lines(len(self.options) + 1)
 
-            print(self.prompt, '(Press SPACE to select and ENTER to continue)')
+            print(self.prompt, '(Use ARROW_KEYS to navigate, press SPACE to select and ENTER to continue)')
 
             # show the options
             for i in range(len(self.options)):
