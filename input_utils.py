@@ -33,8 +33,8 @@ def select_from_list(prompt, options):
             for i in range(len(self.options)):
                 # if the cursor is on the option, use <
                 arrow = '<' if self.cursor == i else ''
-                # if the option is selected, use ✅, else use 🟩
-                check_box = '✅' if i in self.selected else '🟩'
+                # if the option is selected, use ☑︎, else use ◻︎
+                check_box = '☑︎' if i in self.selected else '◻︎'
                 print(check_box, self.options[i], arrow)
 
         def change_cursor(self, value):
