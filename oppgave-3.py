@@ -1,4 +1,5 @@
 from input_utils import select_from_list, get_float
+from complex_utils import complex_round
 import os
 
 
@@ -203,8 +204,8 @@ def main():
                 if missing is not None:
                     # due to calculations being imprecise,
                     # we round the values before checking them
-                    variable_bad = round(
-                        missing[1], 5) != round(variable[1], 5)
+                    variable_bad = complex_round(
+                        missing[1], 5) != complex_round(variable[1], 5)
                     break
             if variable_bad:
                 total_variables.remove(variable_column)
