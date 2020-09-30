@@ -59,6 +59,7 @@ class Equation:
             missing_variables_getter[1](*input_variables)
         )
 
+
 def main():
     # clears the console 🧹
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -83,13 +84,16 @@ def main():
         Equation([
             ('s', lambda v0, t, a: v0 * t + a * t**2 / 2),
             ('v0', lambda s, t, a: (s - a * t**2 / 2) / t),
-            ('t', lambda s, v0, a: (-v0 + (v0**2 + 2 * a * s)**0.5) / a),
+            ('t', lambda s, v0, a: ((-v0 + (v0**2 + 2 * a * s)**0.5) / a,
+                                    (-v0 - (v0**2 + 2 * a * s)**0.5) / a)),
             ('a', lambda s, v0, t: (s - v0 * t) * 2 / t**2),
         ]),
         # v**2 = v0**2 + 2 * a * s
         Equation([
-            ('v', lambda v0, a, s: (v0**2 + 2 * a * s)**0.5),
-            ('v0', lambda v, a, s: (v**2 - 2 * a * s)**0.5),
+            ('v', lambda v0, a, s: ((v0**2 + 2 * a * s)**0.5,
+                                    (-(v0**2 + 2 * a * s)**0.5))),
+            ('v0', lambda v, a, s: ((v**2 - 2 * a * s)**0.5,
+                                    (-(v**2 - 2 * a * s)**0.5))),
             ('a', lambda v, v0, s: v**2 - v0**2 / (2 * s)),
             ('s', lambda v, v0, a: v**2 - v0**2 / (2 * a)),
         ]),
@@ -116,28 +120,104 @@ def main():
     for variable_name in known_variables_names:
         variable_value = get_float(variable_name + ' = ')
         known_variables.append((variable_name, variable_value))
-    print() # new line
+    print()  # new line
 
+    total_variables = []
+    total_variables.append(known_variables)
+
+    # here, we find the variables that corresponds
+    # with the given variables from the user input
+
+    # total_variables is a list of variable columns
+    # a variable column is a list of variables that
+    # corresponds with the known variables (from user input)
+    # the reason there are multiple variable columns is because
+    # t might be one of two variables. This happens for example
+    # when we throw a ball straight up and want to know when it is 5
+    # meters above it's initial position. And since this often
+    # happens at two different points in time, there should be two
+    # variable columns that each contain a different value for t
     done = False
     while not done:
         done = True
+        # go through each equation in search of
+        # more variables for each variable column
         for equation in equations:
-            missing = equation.get_missing_variable(known_variables)
-            # If the we find a missing variable, add it to the list
-            # and make sure to go through each equation again
-            # in case the new found variable will give access
-            # to new variables from the other equations.
-            if missing is not None:
-                known_variables.append(missing)
-                done = False
+            for variable_column in total_variables:
+                missing = equation.get_missing_variable(variable_column)
+                if missing is not None:
+                    done = False
 
-    # For the equation s = v0 * t + a * t^2 / 2,
-    # t will have two possible values if we solve for it.
-    # And I only consider one of them which is why this
-    # is only a list of some* of the possible known variables.
-    print('Here is a list of some* possible known variables:')
-    for name, value in known_variables:
-        print('✔', name, '=', value)
+                    # convert the missing variable into a list
+                    # for example, ('t', (1, -1)) becomes
+                    # [('t', 1), ('t', -1)] and
+                    # ('t', 1) becomes [('t', 1)]
+                    name, values = missing
+                    is_tuple = type(values) is tuple
+                    if is_tuple:
+                        values = (values,)
+                    missing = [(name, value) for value in values]
+
+                    # the equation x^2 = 1 has two valid solutions.
+                    # as a result, get_missing_variable can return
+                    # will possible return two variable values.
+                    # if the the function returns only one solution,
+                    # we add that to the current 'variable column'.
+                    # and for each additional solution, we make
+                    # a copy of the current variable column and
+                    # appends that result to the copy and append
+                    # that copy to 'total variables'
+                    for missing_variable in missing[1:]:
+                        new_column = variable_column.copy()
+                        new_column.append(missing_variable)
+                        total_variables.append(new_column)
+                    variable_column.append(missing[0])
+
+    # the equation v**2 = v0**2 + 2 * a * s gives
+    # two possible solutions for v and v0, one positive
+    # and one negative. But the sign of the variable
+    # entirely depends on the value of t, but this
+    # equation does not depend on t. This causes
+    # this equation to only give the correct value
+    # half of the time.
+
+    # we will now delete each column that contains bad variables.
+    # this happens due to the problem above and
+    # when the user inputs variables that does not correspond
+    # with each other
+
+    # we loop through the total variables in reverse
+    # because we might delete from it while we loop
+    for variable_column in reversed(total_variables):
+        for variable in variable_column:
+            # for each variable in each column, check if that
+            # variable is correct by removing it and
+            # use an equation to get it back. If the variable
+            # is not the same, the entire column is bad and should
+            # be deleted.
+            copy = variable_column.copy()
+            copy.remove(variable)
+            variable_bad = True
+            for equation in equations:
+                missing = equation.get_missing_variable(copy)
+                if missing is not None:
+                    # due to calculations being imprecise,
+                    # we round the values before checking them
+                    variable_bad = round(
+                        missing[1], 5) != round(variable[1], 5)
+                    break
+            if variable_bad:
+                total_variables.remove(variable_column)
+                break
+
+    if len(total_variables) == 0:
+        print('The variables you submitted did not correspond with each other')
+    else:
+        print('Here is a list of all possible known variables:')
+        for variable_column in total_variables:
+            print()
+            for name, value in variable_column:
+                print('✔', name, '=', value)
 
 
 if __name__ == '__main__':
