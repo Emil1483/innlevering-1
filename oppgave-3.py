@@ -154,7 +154,7 @@ def main():
                     # ('t', 1) becomes [('t', 1)]
                     name, values = missing
                     is_tuple = type(values) is tuple
-                    if is_tuple:
+                    if not is_tuple:
                         values = (values,)
                     missing = [(name, value) for value in values]
 
